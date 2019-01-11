@@ -5,7 +5,7 @@
 # heavily modified and adapted for "decryptkeydevice" by Franco
 #
 # Further modifications for current Debian (Stretch) / Ubuntu versions
-# Authored by Phil <development@beph.de>
+# authored by Phil <development@beph.de>
 #
 ### original header :
 #
