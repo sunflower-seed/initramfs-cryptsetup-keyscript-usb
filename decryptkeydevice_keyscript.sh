@@ -169,7 +169,7 @@ fi
 
 if [ $OPENED -ne $TRUE ]; then
 	msg "FAILED to find suitable Key device. Plug in now and press enter, or"
-	readpass "Enter passphrase: "
+	readpass "Please unlock disk $CRYPTTAB_NAME:"
 	msg " "
 else
 	msg "Success loading key from '$DECRYPTKEYDEVICE_FILE'"
