@@ -65,7 +65,7 @@ STTYCMD=false
 if [ -x /bin/stty ]; then
 	STTY=$TRUE
 	STTYCMD=/bin/stty
-elif [ `(busybox stty >/dev/null 2>&1; echo $?)` -eq 0 ]; then
+elif [ $(busybox stty >/dev/null 2>&1; echo $?) -eq 0 ]; then
 	STTY=$TRUE
 	STTYCMD="busybox stty"
 fi
@@ -105,7 +105,7 @@ readpass ()
 {
 	if [ $# -gt 0 ]; then
 		if [ $PLYMOUTH -eq $TRUE ]; then
-			PASS=`/bin/plymouth ask-for-password --prompt="$1"`
+			PASS="$(/bin/plymouth ask-for-password --prompt="$1")"
 		else
 			[ $STTY -ne $TRUE ] && msg "WARNING stty not found, password will be visible"
 			echo -n "$1" >&2
