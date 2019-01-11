@@ -4,6 +4,9 @@
 # original file name crypto-usb-key.sh
 # heavily modified and adapted for "decryptkeydevice" by Franco
 #
+# Further modifications for current Debian (Stretch) / Ubuntu versions
+# Authored by Phil <development@beph.de>
+#
 ### original header :
 #
 # Part of passwordless cryptofs setup in Debian Etch.
