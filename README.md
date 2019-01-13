@@ -37,6 +37,7 @@ sudo chmod +x /etc/decryptkeydevice/decryptkeydevice_keyscript.sh
 /etc/initramfs-tools/hooks/decryptkeydevice.hook
 ```
 and make it executeable in the same way as described in Step 4
+
 6. Finally Update your initramfs. If you see no warnings you should be able to reboot.
 ```
 sudo update-initramfs -k `uname -r` -c 
