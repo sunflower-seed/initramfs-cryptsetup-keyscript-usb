@@ -110,7 +110,7 @@ readpass ()
 			[ $STTY -ne $TRUE ] && msg "WARNING stty not found, password will be visible"
 			echo -n "$1" >&2
 			$STTYCMD -echo
-			read -rs PASS </dev/console >/dev/null
+			read -s PASS </dev/console >/dev/null
 			[ $STTY -eq $TRUE ] && echo >&2
 			$STTYCMD echo
 		fi
