@@ -1,7 +1,6 @@
 # initramfs-cryptsetup-keyscript-usb
-Keyscript for decrypting a full-encrypted luks disk using a usb/mmc storage.
-
-If the decryption process fails you be asked for a password at boot, like usual.
+A custom script to unlock an encrypted [LUKS](https://en.wikipedia.org/wiki/Linux_Unified_Key_Setup) volume using a usb key or mmc storage device.
+If the key is missing or the decryption process fails, the script will prompt for the key or to type the password manually.
 
 ## Prerequisites
 A Linux distribution with an initramfs system.
@@ -22,21 +21,36 @@ sudo dd if=/dev/urandom of=/dev/sdb bs=512 seek=1 count=60
 ```
 sudo dd if=/dev/sdb bs=512 skip=1 count=4 > tempKeyFile.bin
 sudo cryptsetup luksAddKey /dev/sda5 tempKeyFile.bin
-sudo rm -f tempKeyFile.bin 
+sudo shred -f -z tempKeyFile.bin 
 ```
-3. Fill the decryptkeydevice.conf File with the details of your key you createt in Step 1 and 2 and put it to
+3. Fill the `decryptkeydevice.conf` File with the details of the key you created in Step 1 and 2 and copy it to
 ```
-/etc/decryptkeydevice/decryptkeydevice.conf
+# /etc/decryptkeydevice/decryptkeydevice.conf
+# ID(s) of the USB/MMC key(s) for decryption (separated by blanks)
+# as listed in /dev/disk/by-id/
+DECRYPTKEYDEVICE_DISKID="mmc-XXX_0x0AAABBBCCCDDD usb-XyzFlash_XYZDFGHIJK_XXYYZZ00AA-0:0"
+# blocksize usually 512 is OK
+DECRYPTKEYDEVICE_BLOCKSIZE="512"
+# start of key information on keydevice DECRYPTKEYDEVICE_BLOCKSIZE * DECRYPTKEYDEVICE_SKIPBLOCKS
+DECRYPTKEYDEVICE_SKIPBLOCKS="1"
+# length of key information on keydevice DECRYPTKEYDEVICE_BLOCKSIZE * DECRYPTKEYDEVICE_READBLOCKS
+DECRYPTKEYDEVICE_READBLOCKS="4"
 ```
-4. Add path to keyscript.sh to */etc/crypttab* and make in executeable
+
+4. Add path to the keyscript to `/etc/crypttab` and make it executeable
 ```
+# /etc/crypttab
+# X is the device number and Y is he UUID of the encrypted volume
+sdaX_crypt UUID=Y none luks,keyscript=/etc/decryptkeydevice/decryptkeydevice_keyscript.sh
+
+# make the script executable
 sudo chmod +x /etc/decryptkeydevice/decryptkeydevice_keyscript.sh 
 ```
-5. Copy *decryptkeydevice.hook* to
+
+5. Copy `decryptkeydevice.hook` to `/etc/initramfs-tools/hooks` and make it executable
 ```
-/etc/initramfs-tools/hooks/decryptkeydevice.hook
+sudo chmod +x /etc/initramfs-tools/hooks/decryptkeydevice.hook
 ```
-and make it executeable in the same way as described in Step 4
 
 6. Finally Update your initramfs. If you see no warnings you should be able to reboot.
 ```
